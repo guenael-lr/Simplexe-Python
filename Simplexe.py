@@ -13,6 +13,7 @@ class Simplexe:
         self.zi = [0.0 for _ in range(self.n)]
         self.sens = modele.sens
         self.besoinPhase1 = False
+        self.nbX = modele.n
 
         if not modele.maximisation:
             self.coefficientPhase2 = [-1.0 * i for i in modele.c]
@@ -61,10 +62,10 @@ class Simplexe:
 
         #les autres cases sont egales à la valeur de la case - la valeur de la case de la ligne du pivot * la valeur de la case de la colonne du pivot / la valeur du pivot
         for i in range(self.m):
-            for j in range(self.n):
-                if i!=pivot[0] and j!=pivot[1]:
-                    self.tableau[i][j] -= self.tableau[i][pivot[1]] * self.tableau[pivot[0]][j] / pivotValue
             if i!=pivot[0]:
+                for j in range(self.n):
+                    if j!=pivot[1]:
+                        self.tableau[i][j] -= self.tableau[i][pivot[1]] * self.tableau[pivot[0]][j] / pivotValue
                 self.bj[i] -= self.tableau[i][pivot[1]] * self.bj[pivot[0]] / pivotValue
         
         self.tableau[pivot[0]] = [i / pivotValue for i in self.tableau[pivot[0]]]
@@ -75,7 +76,6 @@ class Simplexe:
             if i!=pivot[0]:
                 self.tableau[i][pivot[1]] = 0.0
 
-        
         self.zi = [0.0 for i in range(self.n)]
         for j in range(self.n):
             for i in range(self.m):
@@ -104,7 +104,8 @@ class Simplexe:
         
         print("La solution optimale est :")
         for i in range(self.m):
-            print("x" + str(self.base[i]) + " = " + str(self.bj[i]))
+            if self.base[i] <= self.nbX:
+                print("x" + str(self.base[i]) + " = " + str(self.bj[i]))
         print("z = " + str(np.sum(self.zi)))
 
 
