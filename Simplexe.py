@@ -17,7 +17,6 @@ class Simplexe:
 
         if not modele.maximisation:
             self.coefficientPhase2 = [-1.0 * i for i in modele.c]
-            self.bj = [-1.0 * i for i in modele.b]
 
         self.coefficientPhase2.extend([0.0 for _ in range(modele.m)])
         self.coefficient.extend([0.0 for _ in range(modele.m)])
